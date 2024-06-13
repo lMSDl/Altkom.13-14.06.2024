@@ -117,5 +117,48 @@ namespace ConsoleApp.Test.xUnit
             Assert.Equal("name", argumentException.ParamName);
             Assert.Contains("Roœlina musi posiadaæ nazwê", argumentException.Message);
         }
+
+        [Fact]
+        public void Plant_ExistingName_ChangedName()
+        {
+            //Arrange
+            const int MINIMAL_VALID_SIZE = 2;
+            string validName = new Fixture().Create<string>();
+            string expectedName = validName + 2;
+            Garden garden = new Garden(MINIMAL_VALID_SIZE);
+            garden.Plant(validName);
+
+            //Act
+            var result = garden.Plant(validName);
+
+            //Assert
+            Assert.Contains(expectedName, garden.GetPlants());
+        }
+
+        [Fact]
+        public void GetPlants_CopyOfPlantsCollection()
+        {
+            //Arrange
+            const int INSIGNIFICANT_SIZE = default;
+            Garden garden = new Garden(INSIGNIFICANT_SIZE);
+
+            //Act
+            var result1 = garden.GetPlants();
+            var result2 = garden.GetPlants();
+
+            //Assert
+            Assert.NotSame(result1, result2);
+        }
+
+        [Fact]
+        public void alamakota()
+        {
+            Garden garden = new Garden(1);
+            garden.Plant("a");
+
+            garden.Remove("");
+            garden.Remove("a");
+        }
+
     }
 }
