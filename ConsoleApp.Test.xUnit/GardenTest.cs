@@ -40,5 +40,82 @@ namespace ConsoleApp.Test.xUnit
             //Assert
             Assert.False(result);
         }
+
+        [Fact]
+        public void Plant_NullName_ArgumentNullException()
+        {
+            //Arrange
+            const int INSIGNIFICANT_SIZE = default;
+            Garden garden = new Garden(INSIGNIFICANT_SIZE);
+            string? nullName = null;
+
+            //Act
+            Action action = () => garden.Plant(nullName);
+
+            //Assert
+            //ThrowsAny - uwzglêdnia dziedziczenie klas wyj¹tków
+            //var exception = Assert.ThrowsAny<ArgumentException>(action);
+            //Throws - sprawdza konkretny typ
+            var exception = Assert.Throws<ArgumentNullException>(action);
+            Assert.Equal("name", exception.ParamName);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("\n")]
+        [InlineData("\t")]
+        [InlineData(" \n\t")]
+        public void Plant_EmptyOrWhitespaceName_ArgumentException(string name)
+        {
+            //Arrange
+            const int INSIGNIFICANT_SIZE = default;
+            Garden garden = new Garden(INSIGNIFICANT_SIZE);
+
+            //Act
+            var exception = Record.Exception(() => garden.Plant(name));
+
+            //Assert
+            Assert.NotNull(exception);
+            var argumentException = Assert.IsType<ArgumentException>(exception);
+            Assert.Equal("name", argumentException.ParamName);
+            Assert.Contains("Roœlina musi posiadaæ nazwê", argumentException.Message);
+        }
+
+        [Fact(Skip = "Replaced by Plant_EmptyOrWhitespaceName_ArgumentException")]
+        public void Plant_EmptyName_ArgumentException()
+        {
+            //Arrange
+            const int INSIGNIFICANT_SIZE = default;
+            Garden garden = new Garden(INSIGNIFICANT_SIZE);
+            string emptyName = "";
+
+            //Act
+            var exception = Record.Exception(() => garden.Plant(emptyName));
+
+            //Assert
+            Assert.NotNull(exception);
+            var argumentException = Assert.IsType<ArgumentException>(exception);
+            Assert.Equal("name", argumentException.ParamName);
+            Assert.Contains("Roœlina musi posiadaæ nazwê", argumentException.Message);
+        }
+
+        [Fact(Skip = "Replaced by Plant_EmptyOrWhitespaceName_ArgumentException")]
+        public void Plant_WhitespaceName_ArgumentException()
+        {
+            //Arrange
+            const int INSIGNIFICANT_SIZE = default;
+            Garden garden = new Garden(INSIGNIFICANT_SIZE);
+            string whitespaceName = "     \n";
+
+            //Act
+            var exception = Record.Exception(() => garden.Plant(whitespaceName));
+
+            //Assert
+            Assert.NotNull(exception);
+            var argumentException = Assert.IsType<ArgumentException>(exception);
+            Assert.Equal("name", argumentException.ParamName);
+            Assert.Contains("Roœlina musi posiadaæ nazwê", argumentException.Message);
+        }
     }
 }
