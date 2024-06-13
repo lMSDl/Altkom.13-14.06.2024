@@ -29,6 +29,7 @@
 
             if (Items.Contains(name))
             {
+                //throw new ArgumentException("Taka roślina już jest w ogrodzie", nameof(name));
                 name += (Items.Count(x => x.StartsWith(name)) + 1);
             }
 
