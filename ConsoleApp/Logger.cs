@@ -22,7 +22,7 @@ namespace ConsoleApp
         public Task<string> GetLogsAsync(DateTime from, DateTime to)
         {
             return Task.Run(() => string.Join("\n", _logs.Where(x => x.Key >= from).Where(x => x.Key <= to)
-                                        .Select(x => $"{x.Key.ToShortDateString()} {x.Key.ToShortTimeString}: {x.Value}")));
+                                        .Select(x => $"{x.Key.ToShortDateString()} {x.Key.ToShortTimeString()}: {x.Value}")));
         }
 
         public class LoggerEventArgs(DateTime dateTime, string message) : EventArgs

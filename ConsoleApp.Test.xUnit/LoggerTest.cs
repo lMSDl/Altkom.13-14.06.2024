@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +51,27 @@ namespace ConsoleApp.Test.xUnit
             Assert.NotNull(loggerEventArgs);
             Assert.Equal(log, loggerEventArgs.Message);
             Assert.InRange(loggerEventArgs.DateTime, timeStart, timeStop);
+        }
+
+        [Fact]
+        public async void GetLogsAsync_DateRange_LoggerMessage()
+        {
+            //Arrange
+            var log = new AutoFixture.Fixture().Create<string>();
+            var logger = new Logger();
+            var timeStart = DateTime.Now;
+            logger.Log(log);
+            var timeStop = DateTime.Now;
+
+            //Act
+            var result = await logger.GetLogsAsync(timeStart, timeStop)/*.Result*/;
+
+            //
+            var splitted = result.Split(": ");
+            Assert.Equal(2, splitted.Length);
+            Assert.Equal(log, splitted[1]);
+            Assert.True(DateTime.TryParseExact(splitted[0], "dd.MM.yyyy hh:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out _));
+
         }
     }
 }
