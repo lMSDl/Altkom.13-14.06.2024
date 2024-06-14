@@ -58,6 +58,7 @@ namespace ConsoleApp.Test.NUnit
         [TestCase(15, "Buzz", 3)]
         [TestCase(100, "Fizz", 33)]
         [TestCase(100, "Buzz", 20)]
+        [TestCase(100, "FizzBuzz", 6)]
         public void Compute_AnyInt_CorrectFizzBuzzCount(int count, string fizzBuzz, int expectedResult)
         {
             //Act
@@ -65,7 +66,7 @@ namespace ConsoleApp.Test.NUnit
 
             //Assert
             var resultCount = result.Count(x => x.Contains(fizzBuzz));
-            Assert.That(expectedResult, Is.EqualTo(resultCount));
+            Assert.That(resultCount, Is.EqualTo(expectedResult));
         }
 
         [TestCase(1)]
