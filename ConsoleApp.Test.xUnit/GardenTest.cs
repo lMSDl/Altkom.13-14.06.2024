@@ -1,4 +1,7 @@
 using AutoFixture;
+using FluentAssertions;
+using Moq;
+using FluentDateTime;
 
 namespace ConsoleApp.Test.xUnit
 {
@@ -140,7 +143,8 @@ namespace ConsoleApp.Test.xUnit
         {
             //Arrange
             const int INSIGNIFICANT_SIZE = default;
-            Garden garden = new Garden(INSIGNIFICANT_SIZE);
+            var logger = new Mock<ILogger>();
+            Garden garden = new Garden(INSIGNIFICANT_SIZE, logger.Object);
 
             //Act
             var result1 = garden.GetPlants();
@@ -150,15 +154,65 @@ namespace ConsoleApp.Test.xUnit
             Assert.NotSame(result1, result2);
         }
 
-        [Fact]
-        public void alamakota()
-        {
-            Garden garden = new Garden(1);
-            garden.Plant("a");
 
-            garden.Remove("");
-            garden.Remove("a");
+        [Fact]
+        public void Plant_ValidName_MessageLogged()
+        {
+            //Arrange
+            const int MINIMAL_VALID_SIZE = 1; 
+            string validName = new Fixture().Create<string>();
+            var logger = new Mock<ILogger>();
+            Garden garden = new Garden(MINIMAL_VALID_SIZE, logger.Object);
+            logger.Setup(x => x.Log(It.IsAny<string>())).Verifiable(Times.Once);
+
+            //Act
+            var result = garden.Plant(validName);
+
+            //Assert
+            logger.Verify();
         }
 
+        [Fact]
+        public void Plant_DuplicatedName_MessageLogged()
+        {
+            //Arrange
+            const int MINIMAL_VALID_SIZE = 2;
+            string validName = new Fixture().Create<string>();
+            string duplicatedName = validName + 2;
+            var logger = new Mock<ILogger>();
+            Garden garden = new Garden(MINIMAL_VALID_SIZE, logger.Object);
+            garden.Plant(validName);
+
+
+            //Act
+            var result = garden.Plant(validName);
+
+            //Assert
+
+            logger.Verify(x => x.Log(It.Is<string>(xx => xx.Contains(duplicatedName))), Times.Exactly(2));
+            logger.Verify(x => x.Log(It.Is<string>(xx => xx.Contains(validName))), Times.Exactly(3));
+
+        }
+
+        [Fact]
+        public void GetLastLog_LastLog()
+        {
+            //Arrange
+            const int MINIMAL_VALID_SIZE = 0;
+            var logs = new Fixture().CreateMany<string>(2).ToList();
+
+            var logger = new Mock<ILogger>();
+            Garden garden = new Garden(MINIMAL_VALID_SIZE, logger.Object);
+
+            logger.Setup(x => x.GetLogsAsync(new DateTime(), It.IsAny<DateTime>()))
+                .ReturnsAsync(string.Join("\n", logs));
+
+
+            //Act
+            var result = garden.GetLastLog();
+
+            //Assert
+            result.Should().Be(logs.Last());
+        }
     }
 }

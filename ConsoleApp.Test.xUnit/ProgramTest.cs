@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoFixture;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,13 @@ namespace ConsoleApp.Test.xUnit
         {
             @out = Console.Out;
             Console.SetOut(@int);
+        }
+
+
+        [Fact]
+        public void FakeExample()
+        {
+            var person = new Fixture().CreateMany<Person>(10);
         }
     }
 }
