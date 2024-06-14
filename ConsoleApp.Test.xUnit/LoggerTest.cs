@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
+using FluentAssertions.Execution;
 
 namespace ConsoleApp.Test.xUnit
 {
@@ -24,7 +26,8 @@ namespace ConsoleApp.Test.xUnit
             logger.Log(log);
 
             //Assert
-            Assert.Equal(expectedResult, result);
+            //Assert.Equal(expectedResult, result);
+            result.Should().Be(expectedResult);
         }
 
 
@@ -47,10 +50,40 @@ namespace ConsoleApp.Test.xUnit
             //Assert
 
             var timeStop = DateTime.Now;
-            Assert.Equal(logger, sender);
+            /*Assert.Equal(logger, sender);
             Assert.NotNull(loggerEventArgs);
             Assert.Equal(log, loggerEventArgs.Message);
-            Assert.InRange(loggerEventArgs.DateTime, timeStart, timeStop);
+            Assert.InRange(loggerEventArgs.DateTime, timeStart, timeStop);*/
+
+            using (new AssertionScope()) {
+                sender.Should().Be(logger);
+                loggerEventArgs.Should().NotBeNull();
+                loggerEventArgs?.Message.Should().Be(log);
+                //loggerEventArgs?.DateTime.Should().BeOnOrAfter(timeStart).And.BeOnOrBefore(timeStop);
+                loggerEventArgs?.DateTime.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+            }
+        }
+
+        [Fact]
+        public void Log_AnyInput_ValidEventInvoked_FA()
+        {
+            //Arrange
+            var log = new AutoFixture.Fixture().Create<string>();
+            var logger = new Logger();
+            using var monitor = logger.Monitor();
+
+            //Act
+            logger.Log(log);
+
+            //Assert
+
+
+            // (new AssertionScope())
+            {
+                monitor.Should().Raise(nameof(Logger.MessageLogged))
+                    .WithSender(logger)
+                    .WithArgs<Logger.LoggerEventArgs>(x => x.Message == log);
+            }
         }
 
         [Fact]
