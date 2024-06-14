@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Interfaces", "Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI.Test", "WebAPI.Test\WebAPI.Test.csproj", "{BA47DD1A-56E2-44A1-9790-1E6661A3AEA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp", "WpfApp\WpfApp.csproj", "{0F15FFD0-3EB1-4CDF-9EDE-59CBCFECAA1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{BA47DD1A-56E2-44A1-9790-1E6661A3AEA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA47DD1A-56E2-44A1-9790-1E6661A3AEA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA47DD1A-56E2-44A1-9790-1E6661A3AEA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F15FFD0-3EB1-4CDF-9EDE-59CBCFECAA1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F15FFD0-3EB1-4CDF-9EDE-59CBCFECAA1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F15FFD0-3EB1-4CDF-9EDE-59CBCFECAA1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F15FFD0-3EB1-4CDF-9EDE-59CBCFECAA1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
